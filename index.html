@@ -1,25 +1,189 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BankSmart - Compare SA Bank Accounts</title>
-<link rel="stylesheet" href="style.css">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>BankSmart — Compare SA Bank Fees</title>
+<style>
+:root {
+  --bg: #0f172a;
+  --card: #0e1426; 
+  --muted: #94a3b8;
+  --text: #e5e7eb;
+  --table: #0b1220;
+  --accent: #22c55e;
+}
+body {
+  font-family: Inter, sans-serif;
+  background: #0f172a;
+  color: var(--text);
+  margin: 0;
+}
+.wrap {
+  max-width: 1100px;
+  margin: 24px auto;
+  padding: 18px;
+}
+.card {
+  background: var(--card);
+  border: 1px solid #1e293b;
+  border-radius: 12px;
+  padding: 24px;
+}
+.hero {
+  text-align: center;
+  padding: 40px 20px;
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.12), transparent);
+  border-radius: 16px;
+  margin-bottom: 30px;
+}
+.hero h1 {
+  font-size: 2.4rem;
+  background: linear-gradient(135deg, #22c55e, #3b82f6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.controls {
+  display: flex;
+  gap: 16px;
+}
+input {
+  flex: 1;
+  padding: 14px;
+  border-radius: 8px;
+  border: 1px solid #334155;
+  background: #0b1220;
+  color: white;
+  font-size: 16px;
+}
+.btn {
+  padding: 14px 22px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  background: #22c55e;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+}
+.summary { margin: 16px 0; color: #94a3b8; text-align:center; }
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+}
+.table th, .table td {
+  padding: 14px;
+  border-bottom: 1px solid #1e293b;
+}
+.table th {
+  color: #93c5fd;
+  background: #0a1222;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+.apply-btn {
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid #22c55e;
+  color: #22c55e;
+  text-decoration: none;
+  font-size: 14px;
+}
+.apply-btn:hover { background:#22c55e; color:white; }
+.footer { text-align:center; margin-top:30px; padding:20px; color:#94a3b8; }
+</style>
 </head>
+
 <body>
-  <div class="container">
-    <h1>💰 BankSmart South Africa</h1>
-    <p>Find the best personal bank account for your salary.</p>
-    
-    <div class="calculator">
-      <label for="salary">Enter your monthly salary (R):</label>
-      <input type="number" id="salary" placeholder="e.g. 15000">
-      <button id="compareBtn">Compare Banks</button>
+<div class="wrap">
+
+  <div class="hero">
+    <h1>BankSmart</h1>
+    <p>Compare South African Bank Fees & Save Money</p>
+  </div>
+
+  <div class="card">
+    <div class="controls">
+      <input id="salary" type="number" placeholder="Enter your monthly salary (R)" />
+      <button id="compareBtn" class="btn">Compare</button>
     </div>
 
+    <div id="status" class="summary"></div>
     <div id="results"></div>
   </div>
 
-<script src="script.js"></script>
+</div>
+
+<footer class="footer">
+  Built and maintained by <strong>Trevor Barnard</strong><br>
+  <small>We may earn a commission when you apply through our links.</small>
+</footer>
+
+<script>
+// ACCOUNT DATA
+const ACCOUNTS = [
+  { bank:"Bank Zero", account:"Personal", fee:0, minSalary:0, notes:"Zero monthly fee", url:"https://www.bankzero.co.za" },
+  { bank:"Capitec", account:"Global One", fee:7.5, minSalary:0, notes:"Low cost account", url:"https://apply.capitecbank.co.za" },
+  { bank:"Absa", account:"Transact", fee:6.5, minSalary:0, notes:"Affordable everyday banking", url:"https://www.absa.co.za" },
+  { bank:"FNB", account:"Easy PAYT", fee:7.5, minSalary:0, notes:"Pay as you transact", url:"https://www.fnb.co.za" },
+
+  { bank:"FNB", account:"Aspire", fee:109, minSalary:6000, notes:"Includes eBucks & benefits", url:"https://www.fnb.co.za/aspire" },
+
+  { bank:"Capitec", account:"Fusion", fee:30, minSalary:3000, notes:"Credit + debit combined", url:"https://apply.capitecbank.co.za" },
+
+  { bank:"FNB", account:"Premier", fee:265, minSalary:25000, notes:"Premium benefits", url:"https://www.fnb.co.za" }
+];
+
+function trackClick(bank, account){
+  const log = JSON.parse(localStorage.getItem("bankSmartClicks")||"[]");
+  log.push({bank,account,time:new Date().toLocaleString()});
+  localStorage.setItem("bankSmartClicks",JSON.stringify(log));
+}
+
+document.getElementById("compareBtn").addEventListener("click",()=>{
+
+  const salary = Number(document.getElementById("salary").value);
+
+  if(!salary || salary<=0){
+    alert("Enter a valid salary");
+    return;
+  }
+
+  const matches = ACCOUNTS
+    .filter(a => salary >= a.minSalary)
+    .sort((a,b)=>a.fee - b.fee);
+
+  document.getElementById("status").innerHTML =
+    `Showing ${matches.length} matching accounts for salary <strong>R${salary.toLocaleString()}</strong>+`;
+
+  let html = `
+  <table class="table">
+    <tr>
+      <th>Bank</th>
+      <th>Account</th>
+      <th>Fee</th>
+      <th>Notes</th>
+      <th></th>
+    </tr>
+  `;
+
+  matches.forEach(a=>{
+    html += `
+      <tr>
+        <td>${a.bank}</td>
+        <td>${a.account}</td>
+        <td>${a.fee===0?"FREE":"R "+a.fee.toFixed(2)}</td>
+        <td>${a.notes}</td>
+        <td><a class="apply-btn" href="${a.url}" target="_blank" onclick="trackClick('${a.bank}','${a.account}')">Apply</a></td>
+      </tr>
+    `;
+  });
+
+  html += "</table>";
+  document.getElementById("results").innerHTML = html;
+});
+</script>
+
 </body>
 </html>
