@@ -5,6 +5,7 @@
     "fee": 0,
     "minSalary": 0,
     "notes": "No monthly fee (digital bank)",
+    "atmWithdrawalFee": 10.0,
     "url": "https://www.tymebank.co.za"
   },
   {
@@ -13,6 +14,7 @@
     "fee": 0,
     "minSalary": 0,
     "notes": "No monthly fee (digital bank)",
+    "atmWithdrawalFee": 9.0,
     "url": "https://www.bankzero.co.za"
   },
   {
@@ -20,7 +22,8 @@
     "account": "Global One",
     "fee": 7.5,
     "minSalary": 0,
-    "notes": "Low monthly fee at R7.50",
+    "notes": "Low monthly fee",
+    "atmWithdrawalFee": 8.5,
     "url": "https://www.capitecbank.co.za"
   },
   {
@@ -28,7 +31,8 @@
     "account": "Transact",
     "fee": 6.5,
     "minSalary": 0,
-    "notes": "Entry\u2011level account fee",
+    "notes": "Entry-level account",
+    "atmWithdrawalFee": 10.0,
     "url": "https://www.absa.co.za"
   },
   {
@@ -36,7 +40,8 @@
     "account": "Easy/PAYU",
     "fee": 5.0,
     "minSalary": 0,
-    "notes": "Typical entry\u2011level fee",
+    "notes": "Entry-level account",
+    "atmWithdrawalFee": 11.0,
     "url": "https://www.fnb.co.za"
   },
   {
@@ -44,7 +49,8 @@
     "account": "MyMo",
     "fee": 7.5,
     "minSalary": 0,
-    "notes": "Entry\u2011level account fee",
+    "notes": "Entry-level account",
+    "atmWithdrawalFee": 10.0,
     "url": "https://www.standardbank.co.za"
   }
 ]
