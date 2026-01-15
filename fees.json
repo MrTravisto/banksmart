@@ -4,15 +4,15 @@
     "account": "EveryDay",
     "fee": 0,
     "minSalary": 0,
-    "notes": "Zero monthly fee",
+    "notes": "No monthly fee (digital bank)",
     "url": "https://www.tymebank.co.za"
   },
   {
     "bank": "Bank Zero",
-    "account": "Personal",
+    "account": "Debit",
     "fee": 0,
     "minSalary": 0,
-    "notes": "App-based banking",
+    "notes": "No monthly fee (digital bank)",
     "url": "https://www.bankzero.co.za"
   },
   {
@@ -20,7 +20,7 @@
     "account": "Global One",
     "fee": 7.5,
     "minSalary": 0,
-    "notes": "Low cost banking",
+    "notes": "Low monthly fee at R7.50",
     "url": "https://www.capitecbank.co.za"
   },
   {
@@ -28,15 +28,23 @@
     "account": "Transact",
     "fee": 6.5,
     "minSalary": 0,
-    "notes": "Entry level account",
+    "notes": "Entry\u2011level account fee",
     "url": "https://www.absa.co.za"
   },
   {
     "bank": "FNB",
-    "account": "Easy",
-    "fee": 69,
+    "account": "Easy/PAYU",
+    "fee": 5.0,
     "minSalary": 0,
-    "notes": "Starter account",
+    "notes": "Typical entry\u2011level fee",
     "url": "https://www.fnb.co.za"
+  },
+  {
+    "bank": "Standard Bank",
+    "account": "MyMo",
+    "fee": 7.5,
+    "minSalary": 0,
+    "notes": "Entry\u2011level account fee",
+    "url": "https://www.standardbank.co.za"
   }
 ]
