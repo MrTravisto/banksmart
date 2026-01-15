@@ -1,0 +1,42 @@
+[
+  {
+    "bank": "TymeBank",
+    "account": "EveryDay",
+    "fee": 0,
+    "minSalary": 0,
+    "notes": "Zero monthly fee",
+    "url": "https://www.tymebank.co.za"
+  },
+  {
+    "bank": "Bank Zero",
+    "account": "Personal",
+    "fee": 0,
+    "minSalary": 0,
+    "notes": "App-based banking",
+    "url": "https://www.bankzero.co.za"
+  },
+  {
+    "bank": "Capitec",
+    "account": "Global One",
+    "fee": 7.5,
+    "minSalary": 0,
+    "notes": "Low cost banking",
+    "url": "https://www.capitecbank.co.za"
+  },
+  {
+    "bank": "Absa",
+    "account": "Transact",
+    "fee": 6.5,
+    "minSalary": 0,
+    "notes": "Entry level account",
+    "url": "https://www.absa.co.za"
+  },
+  {
+    "bank": "FNB",
+    "account": "Easy",
+    "fee": 69,
+    "minSalary": 0,
+    "notes": "Starter account",
+    "url": "https://www.fnb.co.za"
+  }
+]

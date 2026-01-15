@@ -1,57 +1,45 @@
-body {
-font-family: system-ui, sans-serif;
-background:#0f172a;
-color:#e5e7eb;
-margin:0;
+
+
+.table-wrap {
+  margin-top: 25px;
+  overflow-x: auto;
 }
 
-nav {
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:16px 24px;
-background:#020617;
+.compare-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--card);
+  border: 1px solid #1e293b;
+  border-radius: 12px;
 }
 
-nav a {
-color:#22c55e;
-margin-left:16px;
-text-decoration:none;
-font-weight:600;
+.compare-table th,
+.compare-table td {
+  padding: 12px;
+  border-bottom: 1px solid #1e293b;
+  text-align: left;
 }
 
-.card {
-max-width:900px;
-margin:40px auto;
-background:#020617;
-padding:32px;
-border-radius:16px;
+.compare-table th {
+  background: rgba(34,197,94,0.15);
+  font-weight: 600;
 }
 
-input, button {
-width:100%;
-padding:14px;
-margin:10px 0;
-border-radius:8px;
-border:none;
+.compare-table tr:last-child td {
+  border-bottom: none;
 }
 
-input {
-background:#020617;
-border:1px solid #334155;
-color:white;
+
+#lastUpdated {
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 0.9rem;
 }
 
-button {
-background:#22c55e;
-color:black;
-font-weight:bold;
-cursor:pointer;
-}
-
-.best {
-border:2px solid #22c55e;
-padding:16px;
-border-radius:12px;
-margin-top:20px;
+@media(max-width: 600px) {
+  .compare-table th,
+  .compare-table td {
+    padding: 10px;
+    font-size: 0.9rem;
+  }
 }
