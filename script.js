@@ -1,35 +1,39 @@
-document.getElementById('compareBtn').addEventListener('click', function() {
-  const salary = parseFloat(document.getElementById('salary').value);
-  const resultsDiv = document.getElementById('results');
-  resultsDiv.innerHTML = '';
-  
-  if (isNaN(salary) || salary <= 0) {
-    resultsDiv.innerHTML = '<p>Please enter a valid salary amount.</p>';
-    return;
-  }
+const ACCOUNTS = [
+{bank:"TymeBank",account:"EveryDay",fee:0,minSalary:0},
+{bank:"Bank Zero",account:"Personal",fee:0,minSalary:0},
+{bank:"Capitec",account:"Global One",fee:7.5,minSalary:0},
+{bank:"Absa",account:"Transact",fee:6.5,minSalary:0},
+{bank:"FNB",account:"Easy Account",fee:69,minSalary:0},
+{bank:"Nedbank",account:"MiGoals Plus",fee:99,minSalary:0},
+{bank:"Standard Bank",account:"MyMo Plus",fee:115,minSalary:0},
+{bank:"Discovery Bank",account:"Gold Suite",fee:234,minSalary:0},
+{bank:"Investec",account:"Private Bank",fee:675,minSalary:80000}
+];
 
-  const banks = [
-    { name: 'Capitec Global One', fee: 6.50, interest: 0.03 },
-    { name: 'FNB Easy Account', fee: 8.00, interest: 0.025 },
-    { name: 'Standard Bank MyMo', fee: 10.00, interest: 0.022 },
-    { name: 'ABSA Transact', fee: 5.75, interest: 0.02 },
-    { name: 'Nedbank MiGoals', fee: 7.50, interest: 0.021 }
-  ];
+document.getElementById("btnCompare").onclick = () => {
+const salary = Number(document.getElementById("salary").value);
+const feeCap = Number(document.getElementById("feeCap").value || Infinity);
+const results = document.getElementById("results");
 
-  banks.forEach(b => {
-    b.value = (salary * b.interest / 12) - b.fee;
-  });
+if(!salary){ alert("Please enter your salary"); return; }
 
-  banks.sort((a, b) => b.value - a.value);
+const matches = ACCOUNTS.filter(a => a.minSalary <= salary && a.fee <= feeCap)
+.sort((a,b)=>a.fee-b.fee);
 
-  banks.forEach((bank, index) => {
-    const div = document.createElement('div');
-    div.classList.add('result-card');
-    if (index === 0) div.classList.add('best');
-    div.innerHTML = `<strong>${bank.name}</strong><br>
-      Monthly Fee: R${bank.fee.toFixed(2)}<br>
-      Interest: ${(bank.interest * 100).toFixed(1)}%<br>
-      Net Value: R${bank.value.toFixed(2)} per month`;
-    resultsDiv.appendChild(div);
-  });
+if(!matches.length){
+results.innerHTML = "<p>No matching accounts.</p>";
+return;
+}
+
+const best = matches[0];
+
+let html = `<div class="best"><h3>Best Match</h3>
+<p><strong>${best.bank}</strong> – ${best.account}</p>
+<p>Monthly fee: ${best.fee === 0 ? "FREE" : "R"+best.fee}</p></div>`;
+
+matches.slice(1).forEach(a=>{
+html += `<p>${a.bank} – ${a.account} – R${a.fee}</p>`;
 });
+
+results.innerHTML = html;
+};
