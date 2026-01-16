@@ -1,107 +1,52 @@
-console.log('BankSmart ATM Update Loaded');
+console.log('ATM breakdown loaded');
 
-let ACCOUNTS = [];
-const LAST_UPDATED = "Jan 2026";
+let ACCOUNTS=[];
+fetch('fees.json').then(r=>r.json()).then(d=>ACCOUNTS=d);
 
-fetch('fees.json')
-  .then(r => r.json())
-  .then(data => {
-    ACCOUNTS = data;
-    document.getElementById('lastUpdated').textContent = "Fees last updated: " + LAST_UPDATED;
-  });
+function showResults(salary,feeCap){
+ const r=document.getElementById('results');
+ const t=document.getElementById('compareTable');
+ const s=document.getElementById('status');
 
-function explainFit(a, salary) {
-  if (a.minSalary === 0) return "No minimum salary required.";
-  if (salary >= a.minSalary) return `Your salary qualifies for this account (min: R${a.minSalary}).`;
-  return "Your salary does not meet the minimum requirement.";
+ let m=ACCOUNTS.filter(a=>(a.minSalary||0)<=salary&&a.fee<=feeCap);
+ s.textContent=`Found ${m.length} matching account(s)`;
+
+ if(!m.length){r.innerHTML='<p>No matches</p>';t.innerHTML='';return;}
+
+ m.sort((a,b)=>a.fee-b.fee);
+
+ r.innerHTML=m.map((a,i)=>`
+ <div class="card ${i===0?'best':''}">
+  <h3>${i===0?'Best match: ':''}${a.bank} – ${a.account}</h3>
+  <p>Monthly: R${a.fee}</p>
+  <p>Own ATM: R${a.ownATM} | Other ATM: R${a.otherATM} | Cash@Till: R${a.cashAtTill}</p>
+  <a href="${a.url}" target="_blank">Apply →</a>
+ </div>`).join('');
+
+ t.innerHTML=`
+ <div class="table-wrap">
+ <table class="compare-table">
+ <thead>
+ <tr>
+ <th>Bank</th><th>Account</th><th>Monthly</th><th>Own ATM</th><th>Other ATM</th><th>Cash@Till</th>
+ </tr>
+ </thead>
+ <tbody>
+ ${m.map(a=>`
+ <tr>
+ <td>${a.bank}</td>
+ <td>${a.account}</td>
+ <td>R${a.fee}</td>
+ <td>R${a.ownATM}</td>
+ <td>R${a.otherATM}</td>
+ <td>R${a.cashAtTill}</td>
+ </tr>`).join('')}
+ </tbody></table></div>`;
 }
 
-function sortMatches(matches, key) {
-  return matches.sort((a,b) => {
-    if (key === "fee") return a.fee - b.fee;
-    if (key === "bank") return a.bank.localeCompare(b.bank);
-    if (key === "atm") return a.atmWithdrawalFee - b.atmWithdrawalFee;
-    return 0;
-  });
-}
-
-function showResults(salary, feeCap) {
-  const results = document.getElementById('results');
-  const status = document.getElementById('status');
-  const tableDiv = document.getElementById('compareTable');
-
-  let matches = ACCOUNTS.filter(a =>
-    (a.minSalary || 0) <= salary &&
-    a.fee <= feeCap
-  );
-
-  status.textContent = `Found ${matches.length} matching account(s)`;
-
-  if (!matches.length) {
-    results.innerHTML = '<p>No matches found.</p>';
-    tableDiv.innerHTML = "";
-    return;
-  }
-
-  matches = sortMatches(matches, "fee");
-
-  results.innerHTML = matches.map((a,i) => `
-    <div class="card ${i===0?'best':''}">
-      <h3>${i===0?'Best match: ':''}${a.bank} – ${a.account}</h3>
-      <p>Monthly fee: R${a.fee}</p>
-      <p>ATM Withdrawal: R${a.atmWithdrawalFee.toFixed(2)}</p>
-      <p>${a.notes}</p>
-      <p><em>${explainFit(a, salary)}</em></p>
-      <a href="${a.url}" target="_blank" rel="noopener">Apply →</a>
-    </div>
-  `).join('');
-
-  tableDiv.innerHTML = `
-    <div class="table-wrap">
-      <table class="compare-table">
-        <thead>
-          <tr>
-            <th onclick="reSort('bank')" style="cursor:pointer">Bank ↑</th>
-            <th>Account</th>
-            <th onclick="reSort('fee')" style="cursor:pointer">Monthly Fee ↑</th>
-            <th onclick="reSort('atm')" style="cursor:pointer">ATM Withdrawal ↑</th>
-            <th>Notes</th>
-          </tr>
-        </thead>
-        <tbody id="tbodyRows">
-          ${matches.map(a => `
-            <tr>
-              <td>${a.bank}</td>
-              <td>${a.account}</td>
-              <td>R${a.fee}</td>
-              <td>R${a.atmWithdrawalFee.toFixed(2)}</td>
-              <td>${a.notes}</td>
-            </tr>
-          `).join('')}
-        </tbody>
-      </table>
-    </div>
-  `;
-
-  window.currentMatches = matches;
-}
-
-window.reSort = function(type) {
-  const sorted = sortMatches(window.currentMatches, type);
-  document.getElementById('tbodyRows').innerHTML = sorted.map(a => `
-    <tr>
-      <td>${a.bank}</td>
-      <td>${a.account}</td>
-      <td>R${a.fee}</td>
-      <td>R${a.atmWithdrawalFee.toFixed(2)}</td>
-      <td>${a.notes}</td>
-    </tr>
-  `).join('');
-}
-
-document.getElementById('btnCompare').addEventListener('click', () => {
-  const salary = Number(document.getElementById('salary').value) || 0;
-  const feeCapInput = document.getElementById('feeCap').value;
-  const feeCap = feeCapInput === "" ? Infinity : Number(feeCapInput);
-  showResults(salary, feeCap);
+document.getElementById('btnCompare').addEventListener('click',()=>{
+ const sal=Number(document.getElementById('salary').value)||0;
+ const capInput=document.getElementById('feeCap').value;
+ const cap=capInput===''?Infinity:Number(capInput);
+ showResults(sal,cap);
 });
